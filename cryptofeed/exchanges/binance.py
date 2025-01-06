@@ -38,7 +38,8 @@ class Binance(Feed, BinanceRestMixin):
     valid_depth_intervals = {'100ms', '1000ms'}
     websocket_channels = {
         L2_BOOK: 'depth',
-        TRADES: 'aggTrade',
+        # TRADES: 'aggTrade',
+        TRADES: 'trade',
         TICKER: 'bookTicker',
         CANDLES: 'kline_',
         BALANCES: BALANCES,
@@ -190,7 +191,8 @@ class Binance(Feed, BinanceRestMixin):
                   Decimal(msg['q']),
                   Decimal(msg['p']),
                   self.timestamp_normalize(msg['T']),
-                  id=str(msg['a']),
+                #   id=str(msg['a']),
+                  id=str(msg.get('t') or msg.get('a')),
                   raw=msg)
         await self.callback(TRADES, t, timestamp)
 
@@ -514,7 +516,8 @@ class Binance(Feed, BinanceRestMixin):
         if 'e' in msg:
             if msg['e'] == 'depthUpdate':
                 await self._book(msg, pair, timestamp)
-            elif msg['e'] == 'aggTrade':
+            # elif msg['e'] == 'aggTrade':
+            elif msg['e'] == 'trade' or msg['e'] == 'aggTrade':
                 await self._trade(msg, timestamp)
             elif msg['e'] == 'forceOrder':
                 await self._liquidations(msg, timestamp)
