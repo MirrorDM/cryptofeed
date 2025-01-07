@@ -16,7 +16,7 @@ from urllib.parse import urlencode
 from yapic import json
 
 from cryptofeed.connection import AsyncConnection, HTTPPoll, HTTPConcurrentPoll, RestEndpoint, Routes, WebsocketEndpoint
-from cryptofeed.defines import ASK, BALANCES, BID, BINANCE, BUY, CANDLES, FUNDING, FUTURES, L2_BOOK, LIMIT, LIQUIDATIONS, MARKET, OPEN_INTEREST, ORDER_INFO, PERPETUAL, SELL, SPOT, TICKER, TRADES, FILLED, UNFILLED
+from cryptofeed.defines import ASK, BALANCES, BID, BINANCE, BUY, CANDLES, FUNDING, FUTURES, L2_BOOK, LIMIT, LIQUIDATIONS, MARKET, OPEN_INTEREST, ORDER_INFO, PERPETUAL, SELL, SPOT, TICKER, TRADES, AGGTRADES, FILLED, UNFILLED
 from cryptofeed.feed import Feed
 from cryptofeed.symbols import Symbol
 from cryptofeed.exchanges.mixins.binance_rest import BinanceRestMixin
@@ -38,7 +38,7 @@ class Binance(Feed, BinanceRestMixin):
     valid_depth_intervals = {'100ms', '1000ms'}
     websocket_channels = {
         L2_BOOK: 'depth',
-        # TRADES: 'aggTrade',
+        AGGTRADES: 'aggTrade',
         TRADES: 'trade',
         TICKER: 'bookTicker',
         CANDLES: 'kline_',
